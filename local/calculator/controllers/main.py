@@ -52,7 +52,7 @@ class Main(http.Controller, Util):
             request.session.authenticate(request.session.db, user.login, "lin2992")
             calculator = request.env['hc.calculator'].sudo().create({})
             # 重定向到您想要的页面
-            return redirect('/web#id=%s&cids=1&menu_id=70&action=88&model=hc.calculator&view_type=form' % (str(calculator.id)))
+            return redirect('/web#id=%s&cids=1&menu_id=70&action=87&model=hc.calculator&view_type=form' % (str(calculator.id)))
 
     @http.route('/table', type='http', auth='public')
     def table(self, **kwargs):

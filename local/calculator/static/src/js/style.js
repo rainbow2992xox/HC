@@ -21,6 +21,7 @@ odoo.define('hc.custom_styles', [], function (require) {
         }
            .o_control_panel {
                   position:absolute;
+                  display: none;
         }
         `;
         const res = await Response.json();
