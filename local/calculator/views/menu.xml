@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="激励计划" id="hc_base_menu"/>
+
+    <menuitem name="计算器" id="hc_calculator_menu" parent="hc_base_menu" action="hc_calculator_action"/>
+    <menuitem name="示意家医" id="hc_doctor_menu" parent="hc_base_menu" action="hc_doctor_action"/>
+<!--    <menuitem name="示意图表" id="hc_pivot_menu" parent="hc_base_menu" action="hc_doctor_view_pivot"/>-->
+
+</odoo>

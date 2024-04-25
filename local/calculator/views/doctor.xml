@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='hc_doctor_action' model='ir.actions.act_window'>
+        <field name="name">示意家医</field>
+        <field name="res_model">hc.doctor</field>
+        <field name="view_mode">tree,form,pivot</field>
+    </record>
+
+    <record id="hc_doctor_view_pivot" model="ir.ui.view">
+        <field name="name">hc.doctor.pivot</field>
+        <field name="model">hc.doctor</field>
+        <field name="arch" type="xml">
+            <pivot string="示意家医" sample="1">
+                <field name="calculator_id" type="row"/>
+                <field name="name" type="col"/>
+<!--                <field name="pci_amount_per_month" type="measure" function="sum"/>-->
+<!--                <field name="ecg_amount_per_month" type="row"/>-->
+<!--                <field name="follow_up_amount_per_month" type="row"/>-->
+            </pivot>
+        </field>
+    </record>
+</odoo>

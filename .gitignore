@@ -1,0 +1,14 @@
+# dotfiles, with exceptions:
+.*
+!.gitignore
+# python compiled files
+*.py[co]
+# emacs backup files
+*~
+# not tracked subdirectories
+/bin/
+/env/
+/filestore/
+/odoo17/
+rsa_private_key.pem
+rsa_public_key.pem

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="template_table">
+        <h1>TEST</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Header 1</th>
+                    <th>Header 2</th>
+                    <th>Header 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-foreach="rows" t-as="row">
+                    <tr>
+                        <td>
+                            <t t-esc="row['column1']"/>
+                        </td>
+                        <td>
+                            <t t-esc="row['column2']"/>
+                        </td>
+                        <td>
+                            <t t-esc="row['column3']"/>
+                        </td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </template>
+</odoo>

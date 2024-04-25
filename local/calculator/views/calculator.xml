@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='hc_calculator_action' model='ir.actions.act_window'>
+        <field name="name">计算器</field>
+        <field name="res_model">hc.calculator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'website': True}</field>
+    </record>
+
+
+    <record id="hc_calculator_view_form" model="ir.ui.view">
+        <field name="name">hc.calculator.form</field>
+        <field name="model">hc.calculator</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <h1>激励机制计算器</h1>
+                    <separator/>
+                    <h3>管理计划</h3>
+                    <separator/>
+                    <group col="2">
+                        <group>
+                            <field name="county_total_population" class='oe_inline'></field>
+                            <field name="county_previous_year_pci_quantity" class='oe_inline'></field>
+                            <field name="town_population" class='oe_inline'></field>
+                            <field name="town_estimated_high_risk_population"></field>
+                            <field name="town_theoretical_annual_pci_estimation"></field>
+                            <field name="town_previous_year_pci_quantity_estimation"></field>
+
+                            <field name="planned_pci_ratio_to_theoretical_quantity" class='oe_inline' widget="percentage"></field>
+                            <field name="planned_high_risk_population_management_ratio" options="{'digits': (16, 0)}" widget="percentage"></field>
+                            <field name="planned_high_risk_population_management_quantity"></field>
+                            <field name="predicted_pci_quantity_obtainable"></field>
+                        </group>
+
+                        <group>
+                            <field name="average_family_doctor_managed_high_risk_population" class='oe_inline'></field>
+                            <field name="average_family_doctor_incentive_amount_per_month" widget="monetary" class='oe_inline'></field>
+                            <field name="family_doctor_incentive_distribution_ratio" widget="percentage" class='oe_inline'></field>
+                            <field name="town_incentive_distribution_ratio" widget="percentage" class='oe_inline'></field>
+                            <field name="hospital_incentive_distribution_ratio" widget="percentage"></field>
+                            <field name="required_family_doctor_count"></field>
+                            <field name="family_doctor_incentive_investment" widget="monetary"></field>
+                            <field name="town_incentive_investment" widget="monetary"></field>
+                            <field name="hospital_incentive_investment" widget="monetary"></field>
+                            <field name="total_incentive_investment" widget="monetary"></field>
+                        </group>
+
+                    </group>
+                    <br/>
+
+<!--                    <field name="chart" widget="html"/>-->
+                    <br/>
+                    <group col="2">
+                        <group>
+                            <field name="pci_medical_insurance_payment_limit" widget="monetary" class='oe_inline'></field>
+                            <field name="pci_average_accounting_cost" widget="monetary" class='oe_inline'></field>
+                            <field name="annual_increment_pci_revenue" widget="monetary"></field>
+                            <field name="annual_management_incremental_revenue_estimate"
+                                   options="{'style': 'color: green;' }" widget="monetary"></field>
+                        </group>
+                        <group>
+                             <img src="/calculator/static/src/img/line.png" style="height: 200px;"/>
+                        </group>
+                    </group>
+
+                    <br/>
+                    <h3>家医激励</h3>
+                    <separator/>
+                    <group col="2">
+                        <group>
+                            <field name="avg_patient_per_family_doctor_per_month" class='oe_inline'></field>
+                            <field name="max_follow_up_per_patient_per_month" class='oe_inline'></field>
+                            <field name="max_ecg_per_patient_per_month" class='oe_inline'></field>
+                            <field name="avg_pci_referral_per_family_doctor_per_quarter" class='oe_inline'></field>
+                            <field name="avg_monthly_incentive_budget_per_family_doctor" class='oe_inline'></field>
+                            <field name="pci_incentive_value_ratio" widget="percentage" class='oe_inline'></field>
+                            <field name="ecg_incentive_value_ratio" widget="percentage" class='oe_inline'></field>
+                            <field name="follow_up_incentive_value_ratio" widget="percentage"></field>
+                        </group>
+                        <group>
+                            <field name="pci_referral_incentive_amount" options="{'digits': (16, 2)}"></field>
+                            <field name="ecg_incentive_amount" options="{'digits': (16, 2)}"></field>
+                            <field name="follow_up_incentive_amount" options="{'digits': (16, 2)}"></field>
+
+                            <field name="pci_incentive_amount_per_family_doctor_per_month"></field>
+                            <field name="ecg_incentive_amount_per_family_doctor_per_month"></field>
+                            <field name="follow_up_incentive_amount_per_family_doctor_per_month"></field>
+                            <field name="total_incentive_amount_per_family_doctor_per_month"></field>
+
+
+                        </group>
+                        <group colspan="2">
+                            <separator/>
+                            <field name="sample" widget="html"/>
+                        </group>
+
+                    </group>
+                    <separator/>
+                    <!--                    <h3>参数设定</h3>-->
+                    <separator/>
+                    <group col="1" invisible="1">
+                        <group>
+                            <field name="avg_pci_referral_per_family_doctor_per_month"></field>
+                            <field name="max_follow_up_per_patient_per_month"></field>
+                            <field name="max_follow_up_per_month"></field>
+                            <field name="max_ecg_per_patient_per_month"></field>
+                            <field name="max_ecg_per_month"></field>
+                            <field name="pci_incentive_value_ratio" widget="percentage"></field>
+                            <field name="ecg_incentive_value_ratio" widget="percentage"></field>
+                            <field name="follow_up_incentive_value_ratio" widget="percentage"></field>
+
+                            <field name="follow_up_weight" options="{'digits': (16, 1)}"></field>
+                            <field name="ecg_weight" options="{'digits': (16, 1)}"></field>
+                            <field name="pci_weight" options="{'digits': (16, 1)}"></field>
+
+                            <field name="pci_score"></field>
+                            <field name="ecg_score"></field>
+                            <field name="follow_up_score"></field>
+                            <field name="weight_score"></field>
+
+                            <field name="pci_incentive_amount_per_family_doctor_per_month" options="{'digits': (16, 1)}"></field>
+                            <field name="ecg_incentive_amount_per_family_doctor_per_month" options="{'digits': (16, 1)}"></field>
+                            <field name="follow_up_incentive_amount_per_family_doctor_per_month" options="{'digits': (16, 1)}"></field>
+                            <field name="total_incentive_amount_per_family_doctor_per_month" options="{'digits': (16, 1)}"></field>
+                        </group>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
