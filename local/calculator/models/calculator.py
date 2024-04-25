@@ -2,6 +2,8 @@ import os
 
 from odoo import models, fields, api
 import math, requests
+
+
 # import pyecharts.options as opts
 # from pyecharts.charts import Line
 
@@ -134,21 +136,24 @@ class calculator(models.Model):
             else:
                 rec.weight_score = 0
 
-    pci_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月PCI激励金额上限', digits=(16, 1), compute="_compute_pci_incentive_amount_per_family_doctor_per_month", readonly=True)
+    pci_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月PCI激励金额上限', digits=(16, 1), compute="_compute_pci_incentive_amount_per_family_doctor_per_month",
+                                                                    readonly=True)
 
     @api.depends("pci_score", "weight_score")
     def _compute_pci_incentive_amount_per_family_doctor_per_month(self):
         for rec in self:
             rec.pci_incentive_amount_per_family_doctor_per_month = rec.pci_score * rec.weight_score
 
-    ecg_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月心电激励金额上限', digits=(16, 1), compute="_compute_ecg_incentive_amount_per_family_doctor_per_month", readonly=True)
+    ecg_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月心电激励金额上限', digits=(16, 1), compute="_compute_ecg_incentive_amount_per_family_doctor_per_month",
+                                                                    readonly=True)
 
     @api.depends("pci_score", "weight_score")
     def _compute_ecg_incentive_amount_per_family_doctor_per_month(self):
         for rec in self:
             rec.ecg_incentive_amount_per_family_doctor_per_month = rec.ecg_score * rec.weight_score
 
-    follow_up_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月随访激励金额上限', digits=(16, 1), compute="_compute_follow_up_incentive_amount_per_family_doctor_per_month",
+    follow_up_incentive_amount_per_family_doctor_per_month = fields.Float(string='每位家医月随访激励金额上限', digits=(16, 1),
+                                                                          compute="_compute_follow_up_incentive_amount_per_family_doctor_per_month",
                                                                           readonly=True)
 
     @api.depends("follow_up_score", "weight_score")
@@ -391,7 +396,7 @@ class calculator(models.Model):
                                  "月随访次数"]:
                         row_dict[col] = data[col][row]
                     elif row == "月PCI激励":
-                        amount = round(data[col]["月PCI上转"] * rec.pci_referral_incentive_amount,1)
+                        amount = round(data[col]["月PCI上转"] * rec.pci_referral_incentive_amount, 1)
                         row_dict[col] = amount
                         data[col][row] = amount
                     elif row == "月心电图激励":
@@ -403,7 +408,7 @@ class calculator(models.Model):
                         row_dict[col] = amount
                         data[col][row] = amount
                     elif row == "月激励总计":
-                        row_dict[col] = data[col]["月PCI激励"] + data[col]["月心电图激励"] + data[col]["月随访激励"]
+                        row_dict[col] = round(data[col]["月PCI激励"] + data[col]["月心电图激励"] + data[col]["月随访激励"], 1)
 
                 json_data.append(row_dict)
 
