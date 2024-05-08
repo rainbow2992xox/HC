@@ -26,6 +26,13 @@ class calculator(models.Model):
     planned_high_risk_population_management_quantity = fields.Integer(string='计划高危人群管理数量', compute='_compute_high_risk_quantity', readonly=True)
     predicted_pci_quantity_obtainable = fields.Integer(string='所辖乡镇可获得PCI数量(预测)', compute='_compute_pci_quantity', readonly=True)
 
+    incremental_pci_count_prediction = fields.Integer(string='增量PCI数量(预测)', compute='_compute_incremental_pci_count_prediction', readonly=True)
+
+    @api.depends("predicted_pci_quantity_obtainable", "town_previous_year_pci_quantity_estimation")
+    def _compute_incremental_pci_count_prediction(self):
+        for rec in self:
+            rec.incremental_pci_count_prediction = rec.predicted_pci_quantity_obtainable - rec.town_previous_year_pci_quantity_estimation
+
     average_family_doctor_managed_high_risk_population = fields.Integer(string='平均家医管理高危人数', default=50)
     average_family_doctor_incentive_amount_per_month = fields.Integer(string='平均家医激励金额/月', default=1000)
     family_doctor_incentive_distribution_ratio = fields.Float(string='家医激励分配比例', default=0.8)
@@ -45,12 +52,24 @@ class calculator(models.Model):
 
     pci_medical_insurance_payment_limit = fields.Float(string='PCI医保支付额度', default=40000, digits=(16, 0))
     pci_average_accounting_cost = fields.Float(string='PCI平均核算成本', default=15000, digits=(16, 0))
+    singleton_pci_revenue = fields.Float(string='单例PCI收益', compute='_compute_singleton_pci_revenue', digits=(16, 0), readonly=True)
+
+    @api.depends("pci_medical_insurance_payment_limit", "pci_average_accounting_cost")
+    def _compute_singleton_pci_revenue(self):
+        for rec in self:
+            rec.singleton_pci_revenue = rec.pci_medical_insurance_payment_limit - rec.pci_average_accounting_cost
+
     annual_increment_pci_revenue = fields.Float(string='年度增量PCI收益', compute='_compute_annual_increment_pci_revenue', digits=(16, 0), readonly=True)
     annual_management_incremental_revenue_estimate = fields.Float(string='年度管理实施综合增量收益(预估)', digits=(16, 0), compute='_compute_annual_management_incremental_revenue', readonly=True)
 
-    avg_patient_per_family_doctor_per_month = fields.Integer(string='每位家医月管理患者平均人数', default=50)
+    avg_patient_per_family_doctor_per_month = fields.Integer(string='每位家医月管理患者平均人数', compute='_compute_avg_patient_per_family_doctor_per_month', readonly=True)
     max_follow_up_per_patient_per_month = fields.Integer(string='每位家医月随访次数/患者(最多)', default=4)
     max_follow_up_per_month = fields.Integer(string='每位家医月随访次数', compute='_compute_max_follow_up_per_month', readonly=True)
+
+    @api.depends("average_family_doctor_managed_high_risk_population")
+    def _compute_avg_patient_per_family_doctor_per_month(self):
+        for rec in self:
+            rec.avg_patient_per_family_doctor_per_month = rec.average_family_doctor_managed_high_risk_population
 
     @api.depends("avg_patient_per_family_doctor_per_month", "max_follow_up_per_patient_per_month")
     def _compute_max_follow_up_per_month(self):
@@ -66,14 +85,20 @@ class calculator(models.Model):
             rec.max_ecg_per_month = rec.avg_patient_per_family_doctor_per_month * rec.max_ecg_per_patient_per_month
 
     avg_pci_referral_per_family_doctor_per_month = fields.Float(string='每位家医月度平均PCI上转数量', compute='_compute_avg_pci_referral_per_family_doctor_per_month')
-    avg_pci_referral_per_family_doctor_per_quarter = fields.Float(string='每位家医季度平均PCI上转数量', default=1)
+    avg_pci_referral_per_family_doctor_per_quarter = fields.Integer(string='每位家医季度平均PCI上转数量', default=1)
 
     @api.depends("avg_pci_referral_per_family_doctor_per_quarter")
     def _compute_avg_pci_referral_per_family_doctor_per_month(self):
         for rec in self:
             rec.avg_pci_referral_per_family_doctor_per_month = rec.avg_pci_referral_per_family_doctor_per_quarter / 3
 
-    avg_monthly_incentive_budget_per_family_doctor = fields.Float(string='家医人均月激励金额预算', default=1000)
+    avg_monthly_incentive_budget_per_family_doctor = fields.Float(string='家医人均月激励金额预算', compute='_compute_avg_monthly_incentive_budget_per_family_doctor', readonly=True)
+
+    @api.depends("average_family_doctor_incentive_amount_per_month")
+    def _compute_avg_monthly_incentive_budget_per_family_doctor(self):
+        for rec in self:
+            rec.avg_monthly_incentive_budget_per_family_doctor = rec.average_family_doctor_incentive_amount_per_month
+
     pci_incentive_value_ratio = fields.Float(string='PCI激励价值占比', digits=(16, 2), default=0.2)
     ecg_incentive_value_ratio = fields.Float(string='心电图激励价值占比', digits=(16, 2), default=0.5)
 
@@ -317,57 +342,57 @@ class calculator(models.Model):
             rec.chart = '''<img src="//static/line.png" >'''
             print(rec.chart)
 
-    @api.depends("pci_referral_incentive_amount", "follow_up_incentive_amount", "ecg_incentive_amount")
+    @api.depends("pci_referral_incentive_amount", "follow_up_incentive_amount", "ecg_incentive_amount", "avg_patient_per_family_doctor_per_month")
     def _compute_table(self):
         for rec in self:
             data = {
                 "家医A": {
-                    "患者数量": 100,
+                    "患者数量": rec.avg_patient_per_family_doctor_per_month,
                     "月PCI上转": 1,
-                    "月心电图次数": 100,
-                    "月随访次数": 400
+                    "月心电图次数": rec.avg_patient_per_family_doctor_per_month,
+                    "月随访次数": rec.avg_patient_per_family_doctor_per_month * 4
                 },
                 "家医B": {
-                    "患者数量": 80,
-                    "月PCI上转": 0,
-                    "月心电图次数": 80,
-                    "月随访次数": 200
+                    "患者数量": rec.avg_patient_per_family_doctor_per_month,
+                    "月PCI上转": 2,
+                    "月心电图次数": rec.avg_patient_per_family_doctor_per_month,
+                    "月随访次数": rec.avg_patient_per_family_doctor_per_month * 4
                 },
                 "家医C": {
-                    "患者数量": 50,
+                    "患者数量": rec.avg_patient_per_family_doctor_per_month,
                     "月PCI上转": 0,
-                    "月心电图次数": 30,
-                    "月随访次数": 100
+                    "月心电图次数": rec.avg_patient_per_family_doctor_per_month,
+                    "月随访次数": rec.avg_patient_per_family_doctor_per_month * 4
                 },
                 "家医D": {
-                    "患者数量": 100,
+                    "患者数量": int(rec.avg_patient_per_family_doctor_per_month * 0.8),
                     "月PCI上转": 0,
-                    "月心电图次数": 100,
-                    "月随访次数": 400
+                    "月心电图次数": int(rec.avg_patient_per_family_doctor_per_month * 0.8 * 0.8) ,
+                    "月随访次数": int(rec.avg_patient_per_family_doctor_per_month * 0.8) * 3
                 },
                 "家医E": {
-                    "患者数量": 60,
+                    "患者数量": int(rec.avg_patient_per_family_doctor_per_month * 0.6),
                     "月PCI上转": 0,
-                    "月心电图次数": 20,
-                    "月随访次数": 200
+                    "月心电图次数": int(rec.avg_patient_per_family_doctor_per_month * 0.6),
+                    "月随访次数": int(rec.avg_patient_per_family_doctor_per_month * 0.6) * 4
                 },
                 "家医F": {
-                    "患者数量": 70,
-                    "月PCI上转": 1,
-                    "月心电图次数": 50,
-                    "月随访次数": 200
+                    "患者数量": int(rec.avg_patient_per_family_doctor_per_month * 0.5),
+                    "月PCI上转": 0,
+                    "月心电图次数": int(rec.avg_patient_per_family_doctor_per_month * 0.5),
+                    "月随访次数": int(rec.avg_patient_per_family_doctor_per_month * 0.5) * 4,
                 },
                 "家医G": {
-                    "患者数量": 90,
-                    "月PCI上转": 2,
-                    "月心电图次数": 90,
-                    "月随访次数": 360
+                    "患者数量": int(rec.avg_patient_per_family_doctor_per_month * 0.9),
+                    "月PCI上转": 1,
+                    "月心电图次数": int(rec.avg_patient_per_family_doctor_per_month * 0.9 * 0.5),
+                    "月随访次数": int(rec.avg_patient_per_family_doctor_per_month * 0.9) * 2
                 },
                 "家医H": {
-                    "患者数量": 100,
-                    "月PCI上转": 0,
-                    "月心电图次数": 100,
-                    "月随访次数": 400
+                    "患者数量": rec.avg_patient_per_family_doctor_per_month,
+                    "月PCI上转": 2,
+                    "月心电图次数": int(rec.avg_patient_per_family_doctor_per_month * 0.3),
+                    "月随访次数": rec.avg_patient_per_family_doctor_per_month * 4
                 }
             }
 
