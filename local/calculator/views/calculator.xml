@@ -119,12 +119,12 @@
                                     <field name="ecg_incentive_amount_per_family_doctor_per_month"></field>
                                     <field name="follow_up_incentive_amount_per_family_doctor_per_month"></field>
                                 </group>
+                                <separator/>
                                 <group colspan="3">
-                                    <br/>
                                     <field name="sample" widget="html"/>
                                 </group>
-
                             </group>
+
                         </page>
                     </notebook>
 
