@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 import math
-import pandas as pd
 
 
 class Recharge(models.Model):
