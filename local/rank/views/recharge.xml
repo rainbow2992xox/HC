@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id='rank_recharge_action' model='ir.actions.act_window'>
+        <field name="name">充值记录</field>
+        <field name="res_model">rank.recharge</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="rank_recharge_view_tree" model="ir.ui.view">
+        <field name="name">rank.recharge.tree</field>
+        <field name="model">rank.recharge</field>
+        <field name="arch" type="xml">
+            <tree string="充值记录">
+                <field name="create_date"></field>
+                <field name="transaction_time"></field>
+                <field name="phone_num"></field>
+                <field name="transaction_serial_code"></field>
+                <field name="transaction_order_code"></field>
+                <field name="card_num"></field>
+                <field name="transaction_amount"></field>
+                <field name="action_type"></field>
+            </tree>
+        </field>
+    </record>
+</odoo>

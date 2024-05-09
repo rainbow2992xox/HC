@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="排行榜" id="rank_base_menu"/>
+
+    <menuitem name="充值记录" id="rank_recharge_menu" parent="rank_base_menu" action="rank_recharge_action"/>
+<!--    <menuitem name="示意图表" id="hc_pivot_menu" parent="hc_base_menu" action="hc_doctor_view_pivot"/>-->
+
+</odoo>

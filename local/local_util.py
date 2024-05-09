@@ -108,7 +108,7 @@ def check_params(check_list=None):
         def wrapper(*args, **kwargs):
             if check_list is not None:
                 if hasattr(http.request, "jsonrequest"):
-                    body = http.request.jsonrequest
+                    body = http.request.json
                 else:
                     body = http.request.params
                 for key in check_list:
