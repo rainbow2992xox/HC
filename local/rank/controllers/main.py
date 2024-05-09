@@ -91,6 +91,7 @@ class Main(http.Controller, Util):
         for i in kw["data"]:
             t_id = request.env['rank.recharge'].sudo().search([('transaction_serial_code', '=', i['transaction_serial_code'])]).id
             if not t_id:
+                i['transaction_time'] = (datetime.strptime(i['transaction_time'], '%Y-%m-%d %H:%M:%S') - timedelta(hours=8)).strftime(DEFAULT_SERVER_DATETIME_FORMAT)
                 print(i)
                 request.env['rank.recharge'].sudo().create(i)
         return "OK"
