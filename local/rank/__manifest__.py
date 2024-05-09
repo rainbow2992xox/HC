@@ -3,9 +3,9 @@
     'version': '1.0.0',
     'depends': ['base'],
     'data': [
-        'views/menu.xml',
         'views/recharge.xml',
         'views/config.xml',
+        'views/menu.xml',
     ],
     'assets': {
         'web.assets_backend': [
