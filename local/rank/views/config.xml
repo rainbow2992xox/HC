@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    <record id="view_config_settings_form" model="ir.ui.view">-->
+<!--        <field name="name">config.settings.form</field>-->
+<!--        <field name="model">res.config.settings</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="日期配置">-->
+<!--                <group>-->
+<!--                    <field name="currentDate" string="活动日期"/>-->
+<!--                </group>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+
+<!-- -->
+<!-- (c) Copyright Ascensio System SIA 2024 -->
+<!-- -->
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.rank</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="10" />
+        <field name="inherit_id" ref="base.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="rank" string="rank" name="rank" groups="base.group_system">
+                    <block title="活动时间" name="rank">
+                        <setting string="开始时间">
+                            <field name="start_time"/>
+                        </setting>
+                        <setting string="结束时间">
+                            <field name="end_time"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_rank_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form" />
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'rank'}</field>
+    </record>
+
+</odoo>
