@@ -26,7 +26,7 @@ class Main(http.Controller, Util):
     # 使用auth = 'user'
     # 来确保仅已验证用户才能访问所提供的内容。通过这个方法，我们可以确保
     # request.env.user指向已有用户。
-    @http.route('/api/getRankData', methods=['POST', 'OPTIONS'], type="json", auth='none', csrf=False)
+    @http.route('/api/getRankData', methods=['POST', 'OPTIONS'], type="json", auth='none', csrf=False, cors="*")
     def getRankData(self, **kw):
         kw = request.httprequest.json
         if "phone_num" not in kw:
