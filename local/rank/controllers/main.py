@@ -32,8 +32,8 @@ class Main(http.Controller, Util):
         if "phone_num" not in kw:
             return local_util.api_response('PARAM_ERROR')
 
-        start_time = datetime.strptime(request.env["ir.config_parameter"].sudo().get_param('rank.start_time'), '%Y-%m-%d %H:%M:%S') + timedelta(hours=8)
-        end_time = datetime.strptime(request.env["ir.config_parameter"].sudo().get_param('rank.end_time'), '%Y-%m-%d %H:%M:%S') + timedelta(hours=8)
+        start_time = datetime.strptime(request.env["ir.config_parameter"].sudo().get_param('rank.start_time'), '%Y-%m-%d %H:%M:%S')
+        end_time = datetime.strptime(request.env["ir.config_parameter"].sudo().get_param('rank.end_time'), '%Y-%m-%d %H:%M:%S')
         records = request.env['rank.recharge'].sudo().search(
             [('transaction_time', '>=', start_time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)), ('transaction_time', '<=', end_time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))])
 
