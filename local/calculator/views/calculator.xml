@@ -42,7 +42,7 @@
 
                                 <group>
                                     <field name="average_family_doctor_managed_high_risk_population" class='oe_inline'></field>
-                                    <field name="average_family_doctor_incentive_amount_per_month" widget="monetary"></field>
+                                    <field name="average_family_doctor_incentive_amount_per_month" widget="monetary" class='oe_inline'></field>
                                     <field name="family_doctor_incentive_distribution_ratio" widget="percentage"></field>
                                     <field name="town_incentive_distribution_ratio" widget="percentage"></field>
                                     <field name="hospital_incentive_distribution_ratio" widget="percentage"></field>
